@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.io.InputStream;
 import java.sql.Blob;
 
 @Entity
@@ -18,25 +19,25 @@ public class Filme {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @Basic
     private String nome;
-    
+
     @Basic
     private String ano;
-    
+
     @Basic
     private Integer duracao;
-    
+
     @Lob
     private Blob foto;
-    
+
     @Basic
     private int tamanhoFoto;
-    
+
     @Basic
     private String sinopse;
-    
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Estilo estilo;
 
@@ -75,14 +76,20 @@ public class Filme {
     public InputStream getFoto() {
         /*
         gerar aqui o código que puxa o Blob(byte[]) e trasnformar em InputStream
-        */
-        return foto; //aqui deve retornar um InputStream
+         */
+        try {
+            InputStream is = foto.getBinaryStream();
+            return is; //aqui deve retornar um InputStream
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null; //aqui deve retornar um InputStream
     }
 
     public void setFoto(InputStream foto) {
         /*
         gerar aqui o código que salvará no atributo de InputStream em Blob(byte[])
-        */
+         */
         this.foto = foto; //aqui deve salvar no atributo um Blob(byte[])
     }
 

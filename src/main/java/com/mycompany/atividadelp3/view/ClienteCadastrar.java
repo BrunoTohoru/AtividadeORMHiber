@@ -56,7 +56,7 @@ public class ClienteCadastrar extends javax.swing.JFrame {
         Connection con = ConnectionFactory.createConnectionToMySQL();
 
         ClienteDao dao = new ClienteDao(con);
-        tbm.addList(dao.findAll());
+        tbm.addList(dao.getList());
 
     }
 
@@ -207,7 +207,7 @@ public class ClienteCadastrar extends javax.swing.JFrame {
         cliente.setTelefone(tfTelefone.getText());
 
         ClienteDao dao = new ClienteDao(con);
-        dao.create(cliente);
+        dao.salvar(cliente);
 
         tbm.add(cliente);
         tbm.fireTableDataChanged();
@@ -224,7 +224,7 @@ public class ClienteCadastrar extends javax.swing.JFrame {
             clienteSelecionado.setTelefone(tfTelefone.getText());
 
             ClienteDao dao = new ClienteDao(con);
-            dao.update(clienteSelecionado);
+            dao.atualizar(clienteSelecionado);
             tbm.fireTableDataChanged();
             limpaTela();
             clienteSelecionado = null;
@@ -234,7 +234,7 @@ public class ClienteCadastrar extends javax.swing.JFrame {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         clienteSelecionado = tbm.get(tblCliente.getSelectedRow());
         ClienteDao dao = new ClienteDao(con);
-        dao.delete(clienteSelecionado.getId());
+        dao.remover(clienteSelecionado.getId().longValue());
         System.out.println(clienteSelecionado);
         tbm.remove(clienteSelecionado);
         limpaTela();

@@ -76,7 +76,7 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
         FilmeDao daoFilme = new FilmeDao(con);
         cbmFilme.addAll(daoFilme.findAll());
         ClienteDao daoCliente = new ClienteDao(con);
-        cbmCliente.addAll(daoCliente.findAll());
+        cbmCliente.addAll(daoCliente.getList());
 
     }
 

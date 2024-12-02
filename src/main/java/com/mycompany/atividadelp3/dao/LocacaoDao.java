@@ -67,7 +67,7 @@ public class LocacaoDao implements Dao<Integer, Locacao> {
                 locacao.setDevolucao(rs.getDate("devolucao"));
                 locacao.setValor(rs.getDouble("valor"));
                 locacao.setFilme(daoFilme.retrieve(rs.getInt("filme_id")));
-                locacao.setCliente(daoCliente.retrieve(rs.getInt("cliente_id")));
+                locacao.setCliente(daoCliente.encontrar(rs.getLong("cliente_id")));
             }
             query.close();
         } catch (SQLException e) {
@@ -123,7 +123,7 @@ public class LocacaoDao implements Dao<Integer, Locacao> {
                 locacao.setDevolucao(rs.getDate("devolucao"));
                 locacao.setValor(rs.getDouble("valor"));
                 locacao.setFilme(daoFilme.retrieve(rs.getInt("filme_id")));
-                locacao.setCliente(daoCliente.retrieve(rs.getInt("cliente_id")));
+                locacao.setCliente(daoCliente.encontrar(rs.getLong("cliente_id")));
 
                 locacoes.add(locacao);
             }

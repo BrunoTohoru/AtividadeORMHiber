@@ -9,14 +9,15 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClienteDao implements Dao<Integer, Cliente> {
+public class ClienteDao extends DaoGenerico<Cliente, Long> {
 
     protected Connection con;
 
     public ClienteDao(Connection con) {
+        super(Cliente.class);
         this.con = con;
     }
-
+    /*
     @Override
     public void create(Cliente entity) {
         String sql = "INSERT INTO cliente(nome, endereco, telefone) VALUES (?, ?, ?)";
@@ -125,5 +126,5 @@ public class ClienteDao implements Dao<Integer, Cliente> {
 
         return clientes;
     }
-
+    */
 }
