@@ -6,7 +6,6 @@ package com.mycompany.atividadelp3.view;
 
 import com.mycompany.atividadelp3.bean.Estilo;
 import com.mycompany.atividadelp3.dao.EstiloDao;
-import com.mycompany.atividadelp3.util.ConnectionFactory;
 import com.mycompany.atividadelp3.view.model.EstiloTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,7 +18,6 @@ import javax.swing.JOptionPane;
  */
 public class EstiloCadastrar extends javax.swing.JFrame {
 
-    private Connection con = ConnectionFactory.createConnectionToMySQL();
     private EstiloTableModel tbm;
     private Estilo estiloSelecionado = null;
 
@@ -44,8 +42,8 @@ public class EstiloCadastrar extends javax.swing.JFrame {
     }
 
     private void popula() {
-        EstiloDao dao = new EstiloDao(con);
-        tbm.addList(dao.findAll());
+        EstiloDao dao = new EstiloDao();
+        tbm.addList(dao.getList());
     }
 
     private void populaForm(Estilo estilo) {
@@ -170,8 +168,8 @@ public class EstiloCadastrar extends javax.swing.JFrame {
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         Estilo estilo = new Estilo();
         estilo.setNome(tfNome.getText());
-        EstiloDao dao = new EstiloDao(con);
-        dao.create(estilo);
+        EstiloDao dao = new EstiloDao();
+        dao.salvar(estilo);
 
         tbm.add(estilo);
         tbm.fireTableDataChanged();
@@ -185,8 +183,8 @@ public class EstiloCadastrar extends javax.swing.JFrame {
         } else {
             estiloSelecionado.setNome(tfNome.getText());
 
-            EstiloDao dao = new EstiloDao(con);
-            dao.update(estiloSelecionado);
+            EstiloDao dao = new EstiloDao();
+            dao.atualizar(estiloSelecionado);
             tbm.fireTableDataChanged();
             limpaTela();
             estiloSelecionado = null;
@@ -195,8 +193,8 @@ public class EstiloCadastrar extends javax.swing.JFrame {
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         estiloSelecionado = tbm.get(tblEstilo.getSelectedRow());
-        EstiloDao dao = new EstiloDao(con);
-        dao.delete(estiloSelecionado.getId());
+        EstiloDao dao = new EstiloDao();
+        dao.remover(Long.parseLong(estiloSelecionado.getId().toString()));
         System.out.println(estiloSelecionado);
         tbm.remove(estiloSelecionado);
         limpaTela();

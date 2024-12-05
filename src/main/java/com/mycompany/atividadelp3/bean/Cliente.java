@@ -1,11 +1,14 @@
 package com.mycompany.atividadelp3.bean;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
 
 @Entity
 @Table(name = "cliente")
@@ -23,6 +26,9 @@ public class Cliente {
     
     @Basic
     private String telefone;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    private Set<Locacao> locacoes;
 
     public Integer getId() {
         return id;
@@ -54,6 +60,14 @@ public class Cliente {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Set<Locacao> getLocacoes() {
+        return locacoes;
+    }
+
+    public void setLocacoes(Set<Locacao> locacoes) {
+        this.locacoes = locacoes;
     }
 
     @Override

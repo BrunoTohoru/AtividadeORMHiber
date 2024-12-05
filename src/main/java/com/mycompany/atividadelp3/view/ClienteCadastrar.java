@@ -6,7 +6,6 @@ package com.mycompany.atividadelp3.view;
 
 import com.mycompany.atividadelp3.bean.Cliente;
 import com.mycompany.atividadelp3.dao.ClienteDao;
-import com.mycompany.atividadelp3.util.ConnectionFactory;
 import com.mycompany.atividadelp3.view.model.ClienteTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,7 +18,6 @@ import javax.swing.JOptionPane;
  */
 public class ClienteCadastrar extends javax.swing.JFrame {
 
-    private Connection con = ConnectionFactory.createConnectionToMySQL();
     private ClienteTableModel tbm;
     private Cliente clienteSelecionado = null;
 
@@ -53,9 +51,8 @@ public class ClienteCadastrar extends javax.swing.JFrame {
     }
 
     private void popula() {
-        Connection con = ConnectionFactory.createConnectionToMySQL();
 
-        ClienteDao dao = new ClienteDao(con);
+        ClienteDao dao = new ClienteDao();
         tbm.addList(dao.getList());
 
     }
@@ -206,7 +203,7 @@ public class ClienteCadastrar extends javax.swing.JFrame {
         cliente.setEndereco(tfEndereco.getText());
         cliente.setTelefone(tfTelefone.getText());
 
-        ClienteDao dao = new ClienteDao(con);
+        ClienteDao dao = new ClienteDao();
         dao.salvar(cliente);
 
         tbm.add(cliente);
@@ -223,7 +220,7 @@ public class ClienteCadastrar extends javax.swing.JFrame {
             clienteSelecionado.setEndereco(tfEndereco.getText());
             clienteSelecionado.setTelefone(tfTelefone.getText());
 
-            ClienteDao dao = new ClienteDao(con);
+            ClienteDao dao = new ClienteDao();
             dao.atualizar(clienteSelecionado);
             tbm.fireTableDataChanged();
             limpaTela();
@@ -233,7 +230,7 @@ public class ClienteCadastrar extends javax.swing.JFrame {
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         clienteSelecionado = tbm.get(tblCliente.getSelectedRow());
-        ClienteDao dao = new ClienteDao(con);
+        ClienteDao dao = new ClienteDao();
         dao.remover(clienteSelecionado.getId().longValue());
         System.out.println(clienteSelecionado);
         tbm.remove(clienteSelecionado);

@@ -10,7 +10,6 @@ import com.mycompany.atividadelp3.bean.Locacao;
 import com.mycompany.atividadelp3.dao.ClienteDao;
 import com.mycompany.atividadelp3.dao.FilmeDao;
 import com.mycompany.atividadelp3.dao.LocacaoDao;
-import com.mycompany.atividadelp3.util.ConnectionFactory;
 import com.mycompany.atividadelp3.view.model.ClienteComboModel;
 import com.mycompany.atividadelp3.view.model.FilmeComboModel;
 import com.mycompany.atividadelp3.view.model.LocacaoTableModel;
@@ -30,7 +29,6 @@ import javax.swing.JOptionPane;
  */
 public class LocacaoCadastrar extends javax.swing.JFrame {
 
-    private Connection con = ConnectionFactory.createConnectionToMySQL();
     private LocacaoTableModel tbm;
     private FilmeComboModel cbmFilme;
     private ClienteComboModel cbmCliente;
@@ -71,11 +69,11 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
 
     private void popula() {
         
-        LocacaoDao dao = new LocacaoDao(con);
-        tbm.addList(dao.findAll());
-        FilmeDao daoFilme = new FilmeDao(con);
-        cbmFilme.addAll(daoFilme.findAll());
-        ClienteDao daoCliente = new ClienteDao(con);
+        LocacaoDao dao = new LocacaoDao();
+        tbm.addList(dao.getList());
+        FilmeDao daoFilme = new FilmeDao();
+        cbmFilme.addAll(daoFilme.getList());
+        ClienteDao daoCliente = new ClienteDao();
         cbmCliente.addAll(daoCliente.getList());
 
     }
@@ -285,8 +283,8 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
         locacao.setDevolucao(dataDevolucao);
         locacao.setEmissao(dataEmissao);
 
-        LocacaoDao dao = new LocacaoDao(con);
-        dao.create(locacao);
+        LocacaoDao dao = new LocacaoDao();
+        dao.salvar(locacao);
 
         tbm.add(locacao);
 
@@ -312,8 +310,8 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
             locacaoSelecionado.setEmissao(dataEmissao);
             locacaoSelecionado.setDevolucao(dataDevolucao);
 
-            LocacaoDao dao = new LocacaoDao(con);
-            dao.update(locacaoSelecionado);
+            LocacaoDao dao = new LocacaoDao();
+            dao.atualizar(locacaoSelecionado);
             tbm.fireTableDataChanged();
             limpaTela();
             locacaoSelecionado = null;
@@ -322,8 +320,8 @@ public class LocacaoCadastrar extends javax.swing.JFrame {
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         locacaoSelecionado = tbm.get(tblLocacao.getSelectedRow());
-        LocacaoDao dao = new LocacaoDao(con);
-        dao.delete(locacaoSelecionado.getId());
+        LocacaoDao dao = new LocacaoDao();
+        dao.remover(Long.parseLong(locacaoSelecionado.getId().toString()));
         System.out.println(locacaoSelecionado);
         tbm.remove(locacaoSelecionado);
         limpaTela();

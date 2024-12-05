@@ -8,9 +8,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.util.Set;
 
 @Entity
 @Table(name = "filme")
@@ -40,6 +42,9 @@ public class Filme {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Estilo estilo;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "filme")
+    private Set<Locacao> locacoes;
 
     public Integer getId() {
         return id;
@@ -90,7 +95,7 @@ public class Filme {
         /*
         gerar aqui o código que salvará no atributo de InputStream em Blob(byte[])
          */
-        this.foto = foto; //aqui deve salvar no atributo um Blob(byte[])
+        //this.foto = foto; //aqui deve salvar no atributo um Blob(byte[])
     }
 
     public String getSinopse() {
@@ -115,6 +120,14 @@ public class Filme {
 
     public void setTamanhoFoto(int tamanhoFoto) {
         this.tamanhoFoto = tamanhoFoto;
+    }
+
+    public Set<Locacao> getLocacoes() {
+        return locacoes;
+    }
+
+    public void setLocacoes(Set<Locacao> locacoes) {
+        this.locacoes = locacoes;
     }
 
     @Override

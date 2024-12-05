@@ -1,7 +1,9 @@
 package com.mycompany.atividadelp3.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import java.io.Serializable;
@@ -9,12 +11,13 @@ import java.util.List;
 
 public abstract class DaoGenerico<T, I extends Serializable> {
 
-   protected EntityManager entityManager;
+   protected EntityManager entityManager ;
 
    private Class<T> persistedClass;
 
    protected DaoGenerico() {
-       
+       EntityManagerFactory emf = Persistence.createEntityManagerFactory("ifpr_db");
+       this.entityManager = emf.createEntityManager();
    }
 
    protected DaoGenerico(Class<T> persistedClass) {

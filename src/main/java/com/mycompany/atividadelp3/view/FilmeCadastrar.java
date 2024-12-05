@@ -8,20 +8,17 @@ import com.mycompany.atividadelp3.bean.Estilo;
 import com.mycompany.atividadelp3.bean.Filme;
 import com.mycompany.atividadelp3.dao.EstiloDao;
 import com.mycompany.atividadelp3.dao.FilmeDao;
-import com.mycompany.atividadelp3.util.ConnectionFactory;
 import com.mycompany.atividadelp3.view.model.EstiloComboModel;
 import com.mycompany.atividadelp3.view.model.FilmeTableModel;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +34,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class FilmeCadastrar extends javax.swing.JFrame {
 
-    private Connection con = ConnectionFactory.createConnectionToMySQL();
     private FilmeTableModel tbm;
     private EstiloComboModel cbm;
     private Filme filmeSelecionado = null;
@@ -94,10 +90,10 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     }
 
     private void popula() {
-        FilmeDao dao = new FilmeDao(con);
-        tbm.addList(dao.findAll());
-        EstiloDao daoEstilo = new EstiloDao(con);
-        cbm.addAll(daoEstilo.findAll());
+        FilmeDao dao = new FilmeDao();
+        tbm.addList(dao.getList());
+        EstiloDao daoEstilo = new EstiloDao();
+        cbm.addAll(daoEstilo.getList());
     }
 
     private void limpaTela() {
@@ -349,8 +345,8 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         filme.setSinopse(taSinopse.getText());
         filme.setEstilo(cbm.getSelectedItem());
 
-        FilmeDao dao = new FilmeDao(con);
-        dao.create(filme);
+        FilmeDao dao = new FilmeDao();
+        dao.salvar(filme);
 
         tbm.add(filme);
         tbm.fireTableDataChanged();
@@ -371,8 +367,8 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             filmeSelecionado.setFoto(imagem);
             filmeSelecionado.setTamanhoFoto(tamanho);
 
-            FilmeDao dao = new FilmeDao(con);
-            dao.update(filmeSelecionado);
+            FilmeDao dao = new FilmeDao();
+            dao.atualizar(filmeSelecionado);
             tbm.fireTableDataChanged();
             limpaTela();
             filmeSelecionado = null;
@@ -381,8 +377,8 @@ public class FilmeCadastrar extends javax.swing.JFrame {
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         Filme filmeSelecionado = tbm.get(tblFilme.getSelectedRow());
-        FilmeDao dao = new FilmeDao(con);
-        dao.delete(filmeSelecionado.getId());
+        FilmeDao dao = new FilmeDao();
+        dao.remover(Long.parseLong(filmeSelecionado.getId().toString()));
         System.out.println(filmeSelecionado);
         tbm.remove(filmeSelecionado);
         limpaTela();
