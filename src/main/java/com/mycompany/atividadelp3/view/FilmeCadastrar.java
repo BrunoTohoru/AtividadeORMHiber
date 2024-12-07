@@ -17,9 +17,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -27,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.eclipse.persistence.tools.file.FileUtil;
 
 /**
  *
@@ -38,9 +39,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     private EstiloComboModel cbm;
     private Filme filmeSelecionado = null;
     private String filePath = null;
-    private InputStream imagem = null;
-    private File file = null;
-    private Integer tamanho = null;
+    private byte[] bFileAux = null;
 
     /**
      * Creates new form FilmeCadastrar
@@ -57,14 +56,19 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int linha = tblFilme.getSelectedRow();
-                filmeSelecionado = tbm.get(linha);               
-                populaForm(filmeSelecionado);
+                filmeSelecionado = tbm.get(linha);
+                try {
+                    populaForm(filmeSelecionado);
+                } catch (IOException ex) {
+                    Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         });
     }
 
-    private void populaForm(Filme filme) {
+    private void populaForm(Filme filme) throws IOException {
+
         tfID.setText(String.valueOf(filme.getId()));
         tfNome.setText(filme.getNome());
         tfAno.setText(filme.getAno());
@@ -74,13 +78,19 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         desenhaImagem(filme.getFoto());
         cbm.setSelectedItem(filme.getEstilo());
     }
-    
-    private void desenhaImagem(InputStream fis){
+
+    private void desenhaImagem(byte[] bFile) throws IOException {
+        try ( FileOutputStream fos = new FileOutputStream("Downloads/output.jpg")) {
+            fos.write(bFile);
+            fos.close(); 
+        }
+        File f = new File("Downloads/output.jpg");
         try {
-            BufferedImage bufferedImage = ImageIO.read((InputStream)fis);
+            FileInputStream fis = new FileInputStream(f);
+            BufferedImage bufferedImage = ImageIO.read(fis);
             Image scale = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(scale);
-            
+
             lblShowFoto.setIcon(imageIcon);
             lblShowFoto.updateUI();
         } catch (IOException ex) {
@@ -311,11 +321,11 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG, *JFIF)", "png", "jpg", "jpeg", "jfif"));
         fc.showOpenDialog(this);
         File f = fc.getSelectedFile();
-        file = f;
-        tamanho = (int) fc.getSelectedFile().length();
+        byte[] bFile = new byte[(int) f.length()];
+        this.bFileAux = bFile;
         try {
             FileInputStream fis = new FileInputStream(f);
-            imagem = fis;
+            
             try {
                 BufferedImage bufferedImage = ImageIO.read(fis);
                 Image scaledImage = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), Image.SCALE_SMOOTH);
@@ -327,8 +337,10 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         filePath = f.getPath();
         tfFoto.setText(f.getPath());
 
@@ -340,8 +352,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         filme.setNome(tfNome.getText());
         filme.setAno(tfAno.getText());
         filme.setDuracao(Integer.valueOf(tfDuracao.getText()));
-        filme.setFoto(imagem);
-        filme.setTamanhoFoto(tamanho);
+        filme.setFoto(bFileAux);
         filme.setSinopse(taSinopse.getText());
         filme.setEstilo(cbm.getSelectedItem());
 
@@ -364,8 +375,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             filmeSelecionado.setAno(tfAno.getText());
             filmeSelecionado.setSinopse(taSinopse.getText());
             filmeSelecionado.setDuracao(Integer.valueOf(tfDuracao.getText()));
-            filmeSelecionado.setFoto(imagem);
-            filmeSelecionado.setTamanhoFoto(tamanho);
+            filmeSelecionado.setFoto(bFileAux);
 
             FilmeDao dao = new FilmeDao();
             dao.atualizar(filmeSelecionado);

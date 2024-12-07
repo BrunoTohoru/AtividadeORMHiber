@@ -10,6 +10,8 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.util.Set;
@@ -32,10 +34,7 @@ public class Filme {
     private Integer duracao;
 
     @Lob
-    private Blob foto;
-
-    @Basic
-    private int tamanhoFoto;
+    private byte[] foto;
 
     @Basic
     private String sinopse;
@@ -78,24 +77,12 @@ public class Filme {
         this.duracao = duracao;
     }
 
-    public InputStream getFoto() {
-        /*
-        gerar aqui o código que puxa o Blob(byte[]) e trasnformar em InputStream
-         */
-        try {
-            InputStream is = foto.getBinaryStream();
-            return is; //aqui deve retornar um InputStream
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return null; //aqui deve retornar um InputStream
+    public byte[] getFoto() {
+        return foto;
     }
 
-    public void setFoto(InputStream foto) {
-        /*
-        gerar aqui o código que salvará no atributo de InputStream em Blob(byte[])
-         */
-        //this.foto = foto; //aqui deve salvar no atributo um Blob(byte[])
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
     }
 
     public String getSinopse() {
@@ -112,14 +99,6 @@ public class Filme {
 
     public void setEstilo(Estilo estilo) {
         this.estilo = estilo;
-    }
-
-    public int getTamanhoFoto() {
-        return tamanhoFoto;
-    }
-
-    public void setTamanhoFoto(int tamanhoFoto) {
-        this.tamanhoFoto = tamanhoFoto;
     }
 
     public Set<Locacao> getLocacoes() {
