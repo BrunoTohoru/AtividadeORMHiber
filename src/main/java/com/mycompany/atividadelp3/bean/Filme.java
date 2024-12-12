@@ -34,7 +34,7 @@ public class Filme {
     private Integer duracao;
 
     @Lob
-    private byte[] foto;
+    private Blob foto;
 
     @Basic
     private String sinopse;
@@ -77,11 +77,11 @@ public class Filme {
         this.duracao = duracao;
     }
 
-    public byte[] getFoto() {
+    public Blob getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(Blob foto) {
         this.foto = foto;
     }
 

@@ -14,20 +14,22 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import org.eclipse.persistence.tools.file.FileUtil;
 
 /**
  *
@@ -38,8 +40,8 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     private FilmeTableModel tbm;
     private EstiloComboModel cbm;
     private Filme filmeSelecionado = null;
+    private int tamanho;
     private String filePath = null;
-    private byte[] bFileAux = null;
 
     /**
      * Creates new form FilmeCadastrar
@@ -75,28 +77,32 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         tfDuracao.setText(filme.getDuracao().toString());
         tfFoto.setText(filePath);
         taSinopse.setText(filme.getSinopse());
-        desenhaImagem(filme.getFoto());
+        desenhaImagem();
         cbm.setSelectedItem(filme.getEstilo());
     }
 
-    private void desenhaImagem(byte[] bFile) throws IOException {
-        try ( FileOutputStream fos = new FileOutputStream("Downloads/output.jpg")) {
-            fos.write(bFile);
-            fos.close(); 
-        }
-        File f = new File("Downloads/output.jpg");
+    private void desenhaImagem() throws IOException {
         try {
-            FileInputStream fis = new FileInputStream(f);
-            BufferedImage bufferedImage = ImageIO.read(fis);
-            Image scale = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), Image.SCALE_SMOOTH);
-            ImageIcon imageIcon = new ImageIcon(scale);
+            if (filmeSelecionado.getFoto() != null) {
+                InputStream inputStream = filmeSelecionado.getFoto().getBinaryStream();
+                BufferedImage bufferedImage = ImageIO.read(inputStream);
 
-            lblShowFoto.setIcon(imageIcon);
-            lblShowFoto.updateUI();
+                if (bufferedImage != null) {
+                    ImageIcon imageIcon = new ImageIcon(bufferedImage.getScaledInstance(
+                            lblFoto.getWidth(), lblFoto.getHeight(), Image.SCALE_SMOOTH));
+                    lblFoto.setIcon(imageIcon);
+                    lblFoto.repaint();
+                } else {
+                    System.out.println("Erro: O Blob nao contem uma imagem valida.");
+                }
+            } else {
+                System.out.println("Imagem nao disponivel.");
+            }
         } catch (IOException ex) {
-            Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro ao processar a imagem: " + ex.getMessage());
+        } catch (SQLException ex) {
+            System.out.println("Erro ao acessar o Blob: " + ex.getMessage());
         }
-
     }
 
     private void popula() {
@@ -321,11 +327,9 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         fc.setFileFilter(new FileNameExtensionFilter("Arquivo de imagens(*.PNG,*.JPG,*.JPEG, *JFIF)", "png", "jpg", "jpeg", "jfif"));
         fc.showOpenDialog(this);
         File f = fc.getSelectedFile();
-        byte[] bFile = new byte[(int) f.length()];
-        this.bFileAux = bFile;
         try {
             FileInputStream fis = new FileInputStream(f);
-            
+
             try {
                 BufferedImage bufferedImage = ImageIO.read(fis);
                 Image scaledImage = bufferedImage.getScaledInstance(lblShowFoto.getWidth(), lblShowFoto.getHeight(), Image.SCALE_SMOOTH);
@@ -352,18 +356,40 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         filme.setNome(tfNome.getText());
         filme.setAno(tfAno.getText());
         filme.setDuracao(Integer.valueOf(tfDuracao.getText()));
-        filme.setFoto(bFileAux);
         filme.setSinopse(taSinopse.getText());
         filme.setEstilo(cbm.getSelectedItem());
 
-        FilmeDao dao = new FilmeDao();
-        dao.salvar(filme);
+        try {
+            ImageIcon icon = (ImageIcon) lblFoto.getIcon();
+            Image img = icon.getImage();
+            //Converter Image para BufferedImage
+            BufferedImage bufferedImage = new BufferedImage(
+                    img.getWidth(null),
+                    img.getHeight(null),
+                    BufferedImage.TYPE_INT_ARGB
+            );
 
-        tbm.add(filme);
-        tbm.fireTableDataChanged();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "jpeg", baos);
+            byte[] imageInByte = baos.toByteArray();
+            Blob fotoBlob = new SerialBlob(imageInByte);
+            filme.setFoto(fotoBlob);
 
-        filePath = null;
-        limpaTela();
+            FilmeDao dao = new FilmeDao();
+            dao.salvar(filme);
+
+            tbm.add(filme);
+            tbm.fireTableDataChanged();
+
+            filePath = null;
+            limpaTela();
+        } catch (IOException ex) {
+            Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -375,7 +401,6 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             filmeSelecionado.setAno(tfAno.getText());
             filmeSelecionado.setSinopse(taSinopse.getText());
             filmeSelecionado.setDuracao(Integer.valueOf(tfDuracao.getText()));
-            filmeSelecionado.setFoto(bFileAux);
 
             FilmeDao dao = new FilmeDao();
             dao.atualizar(filmeSelecionado);
