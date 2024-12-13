@@ -77,10 +77,11 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         tfDuracao.setText(filme.getDuracao().toString());
         tfFoto.setText(filePath);
         taSinopse.setText(filme.getSinopse());
-        desenhaImagem();
+        //desenhaImagem();
         cbm.setSelectedItem(filme.getEstilo());
     }
 
+    /*
     private void desenhaImagem() throws IOException {
         try {
             if (filmeSelecionado.getFoto() != null) {
@@ -104,7 +105,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
             System.out.println("Erro ao acessar o Blob: " + ex.getMessage());
         }
     }
-
+     */
     private void popula() {
         FilmeDao dao = new FilmeDao();
         tbm.addList(dao.getList());
@@ -321,6 +322,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProcurarFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcurarFotoActionPerformed
+        /*
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fc.setDialogTitle("Seletor de foto");
@@ -347,7 +349,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
 
         filePath = f.getPath();
         tfFoto.setText(f.getPath());
-
+         */
         //terminar a implementação
     }//GEN-LAST:event_btnProcurarFotoActionPerformed
 
@@ -358,7 +360,14 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         filme.setDuracao(Integer.valueOf(tfDuracao.getText()));
         filme.setSinopse(taSinopse.getText());
         filme.setEstilo(cbm.getSelectedItem());
+        FilmeDao dao = new FilmeDao();
+        dao.salvar(filme);
+        System.out.println("AQUIIII SALVOU ====================================!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        tbm.add(filme);
+        tbm.fireTableDataChanged();
 
+        limpaTela();
+        /*
         try {
             ImageIcon icon = (ImageIcon) lblFoto.getIcon();
             Image img = icon.getImage();
@@ -388,7 +397,7 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FilmeCadastrar.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+         */
 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -411,13 +420,13 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        Filme filmeSelecionado = tbm.get(tblFilme.getSelectedRow());
+        Filme filmeSelecionadoa = tbm.get(tblFilme.getSelectedRow());
         FilmeDao dao = new FilmeDao();
-        dao.remover(Long.parseLong(filmeSelecionado.getId().toString()));
-        System.out.println(filmeSelecionado);
-        tbm.remove(filmeSelecionado);
+        dao.remover(Long.valueOf(filmeSelecionadoa.getId().toString()));
+        System.out.println(filmeSelecionadoa);
+        tbm.remove(filmeSelecionadoa);
         limpaTela();
-        filmeSelecionado = null;
+        filmeSelecionadoa = null;
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void tfAnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfAnoActionPerformed

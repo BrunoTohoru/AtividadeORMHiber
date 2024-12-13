@@ -15,7 +15,6 @@ import com.mycompany.atividadelp3.view.model.FilmeComboModel;
 import com.mycompany.atividadelp3.view.model.LocacaoTableModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

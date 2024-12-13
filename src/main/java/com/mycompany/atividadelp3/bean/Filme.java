@@ -6,14 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.sql.Blob;
 import java.util.Set;
 
 @Entity
@@ -33,15 +29,17 @@ public class Filme {
     @Basic
     private Integer duracao;
 
+    /*
     @Lob
     private Blob foto;
-
+     */
     @Basic
     private String sinopse;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "estilo_id")
     private Estilo estilo;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "filme")
     private Set<Locacao> locacoes;
 
@@ -77,14 +75,15 @@ public class Filme {
         this.duracao = duracao;
     }
 
+    /*
     public Blob getFoto() {
         return foto;
     }
-
+    
     public void setFoto(Blob foto) {
         this.foto = foto;
     }
-
+     */
     public String getSinopse() {
         return sinopse;
     }
