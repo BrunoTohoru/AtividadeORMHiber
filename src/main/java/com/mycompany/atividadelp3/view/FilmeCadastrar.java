@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -155,6 +156,9 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         taSinopse = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -198,6 +202,12 @@ public class FilmeCadastrar extends javax.swing.JFrame {
 
         lblEstilo.setText("Estilo");
 
+        cbEstilo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbEstiloItemStateChanged(evt);
+            }
+        });
+
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,6 +237,27 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         taSinopse.setRows(5);
         jScrollPane2.setViewportView(taSinopse);
 
+        jButton1.setText("Estilo/Duração");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Ano");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Resetar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -245,11 +276,17 @@ public class FilmeCadastrar extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnCadastrar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEditar)
@@ -306,7 +343,10 @@ public class FilmeCadastrar extends javax.swing.JFrame {
                     .addComponent(btnCadastrar)
                     .addComponent(btnEditar)
                     .addComponent(btnExcluir)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
@@ -362,7 +402,6 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         filme.setEstilo(cbm.getSelectedItem());
         FilmeDao dao = new FilmeDao();
         dao.salvar(filme);
-        System.out.println("AQUIIII SALVOU ====================================!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         tbm.add(filme);
         tbm.fireTableDataChanged();
 
@@ -433,6 +472,45 @@ public class FilmeCadastrar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tfAnoActionPerformed
 
+    private void cbEstiloItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbEstiloItemStateChanged
+        
+    }//GEN-LAST:event_cbEstiloItemStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        FilmeDao dao = new FilmeDao();
+        Estilo estiloSelecionado = (Estilo) cbEstilo.getSelectedItem();
+        if (estiloSelecionado != null && tfDuracao.getText().isBlank()) {
+            List<Filme> filmes = dao.buscarFilmesPorEstilo(estiloSelecionado);
+            tbm.addList(filmes);
+            tbm.fireTableDataChanged();
+        }else if(estiloSelecionado != null && !tfDuracao.getText().isBlank()){
+            Integer duracaoMin = Integer.parseInt(tfDuracao.getText());
+            List<Filme> filmes = dao.filtrarFilmesPorEstiloEDuracao(estiloSelecionado, duracaoMin);
+            tbm.addList(filmes);
+            tbm.fireTableDataChanged();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        FilmeDao dao = new FilmeDao();
+        Estilo estiloSelecionado = (Estilo) cbEstilo.getSelectedItem();
+        if (estiloSelecionado != null) {
+            List<Filme> filmes = dao.getList();
+            tbm.addList(filmes);
+            tbm.fireTableDataChanged();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        FilmeDao dao = new FilmeDao();
+        String anoSelecionado = tfAno.getText();
+        if (anoSelecionado != null) {
+            List<Filme> filmes = dao.buscarFilmesPorAno(anoSelecionado);
+            tbm.addList(filmes);
+            tbm.fireTableDataChanged();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -474,6 +552,9 @@ public class FilmeCadastrar extends javax.swing.JFrame {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnProcurarFoto;
     private javax.swing.JComboBox<Estilo> cbEstilo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
