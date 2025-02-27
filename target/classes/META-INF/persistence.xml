@@ -11,6 +11,10 @@
       <property name="jakarta.persistence.jdbc.user" value="root"/>
       <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="jakarta.persistence.jdbc.password" value=""/>
+<<<<<<< HEAD
+=======
+      <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+>>>>>>> 7ac2d2363408919d48bcd8bbb94319769ce7f927
     </properties>
   </persistence-unit>
 </persistence>

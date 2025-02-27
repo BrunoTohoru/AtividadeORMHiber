@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\bruno\OneDrive\Documentos\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\bean\Cliente.java
 C:\Users\bruno\OneDrive\Documentos\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\bean\Estilo.java
 C:\Users\bruno\OneDrive\Documentos\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\bean\Filme.java
@@ -19,3 +20,26 @@ C:\Users\bruno\OneDrive\Documentos\NetBeansProjects\AtividadeORMHiber\src\main\j
 C:\Users\bruno\OneDrive\Documentos\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\FilmeTableModel.java
 C:\Users\bruno\OneDrive\Documentos\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\LocacaoTableModel.java
 C:\Users\bruno\OneDrive\Documentos\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\Principal.java
+=======
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\ClienteCadastrar.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\LocacaoCadastrar.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\ClienteTableModel.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\bean\Filme.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\bean\Cliente.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\FilmeCadastrar.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\FilmeTableModel.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\dao\ClienteDao.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\dao\FilmeDao.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\bean\Estilo.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\dao\EstiloDao.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\LocacaoTableModel.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\bean\Locacao.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\EstiloTableModel.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\ClienteComboModel.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\dao\LocacaoDao.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\EstiloComboModel.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\EstiloCadastrar.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\dao\DaoGenerico.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\model\FilmeComboModel.java
+C:\Users\Aluno\Documents\NetBeansProjects\AtividadeORMHiber\src\main\java\com\mycompany\atividadelp3\view\Principal.java
+>>>>>>> 7ac2d2363408919d48bcd8bbb94319769ce7f927
